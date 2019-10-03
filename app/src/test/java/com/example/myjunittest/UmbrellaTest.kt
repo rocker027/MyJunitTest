@@ -1,17 +1,24 @@
 package com.example.myjunittest
 
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.MockitoAnnotations
 
 class UmbrellaTest {
+    @Mock
+    lateinit var weather: IWeather
+
+    @Before
+    fun setup() {
+        MockitoAnnotations.initMocks(this)
+    }
 
     @Test
     fun totalPriceWithSunnyday() {
         val umbrella = Umbrella()
-        // mock()
-        val weather = mock(IWeather::class.java)
         // use mock.when to return true or false
         `when`(weather.isSunny()).thenReturn(true)
         val expected = 200
@@ -22,8 +29,6 @@ class UmbrellaTest {
     @Test
     fun totalPriceWithRainingday() {
         val umbrella = Umbrella()
-        // mock()
-        val weather = mock(IWeather::class.java)
         // use mock.when to return true or false
         `when`(weather.isSunny()).thenReturn(false)
         val expected = 180

@@ -1,10 +1,10 @@
 package com.example.myjunittest
 
-interface IEailUtil {
+interface IEmailUtil {
     fun sendCustomer(email: String)
 }
 
-class MockEmailUtil : IEailUtil {
+class MockEmailUtil : IEmailUtil {
     var receiverEmail : String? = null
     override fun sendCustomer(email: String) {
         receiverEmail = email
