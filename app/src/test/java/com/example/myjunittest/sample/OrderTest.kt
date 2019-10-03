@@ -1,5 +1,7 @@
-package com.example.myjunittest
+package com.example.myjunittest.sample
 
+import com.example.myjunittest.sample.IEmailUtil
+import com.example.myjunittest.sample.Order
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock

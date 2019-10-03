@@ -1,5 +1,7 @@
-package com.example.myjunittest
+package com.example.myjunittest.sample
 
+import com.example.myjunittest.sample.IWeather
+import com.example.myjunittest.sample.Umbrella
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

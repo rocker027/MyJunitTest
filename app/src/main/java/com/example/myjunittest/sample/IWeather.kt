@@ -1,4 +1,4 @@
-package com.example.myjunittest
+package com.example.myjunittest.sample
 
 interface IWeather {
     fun isSunny() : Boolean

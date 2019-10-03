@@ -1,4 +1,4 @@
-package com.example.myjunittest
+package com.example.myjunittest.sample
 
 class Umbrella {
 

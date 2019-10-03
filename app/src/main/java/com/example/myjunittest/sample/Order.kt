@@ -1,4 +1,4 @@
-package com.example.myjunittest
+package com.example.myjunittest.sample
 
 class Order {
     fun insertOrder(email: String, quantity: Int, price: Int, emailUtil: IEmailUtil) {
