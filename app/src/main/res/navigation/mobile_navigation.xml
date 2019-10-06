@@ -26,5 +26,5 @@
         android:id="@+id/loginFragment"
         android:name="com.example.myjunittest.ui.register.RegisterFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_register" />
 </navigation>
