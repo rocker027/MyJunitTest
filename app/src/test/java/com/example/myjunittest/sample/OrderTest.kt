@@ -1,38 +1,39 @@
 package com.example.myjunittest.sample
 
-import com.example.myjunittest.sample.IEmailUtil
-import com.example.myjunittest.sample.Order
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
 
 class OrderTest {
-    @Mock
-    lateinit var mockEmailUtil: IEmailUtil
+    @MockK(relaxUnitFun = true)
+    lateinit var mockEmailUtil: MockEmailUtil
 
     @Before
-    fun setup() {
-        MockitoAnnotations.initMocks(this)
-    }
+    fun setup() = MockKAnnotations.init(this, relaxed = true)
 
     @Test
     fun insertOrder() {
-        val order  = Order()
+        val order = Order()
+//        var mockEmailUtil = mockk<MockEmailUtil>(relaxed = true)
+//        every { mockEmailUtil.sendCustomer(any()) } just Runs
         // mock()
         val userEmail = "customer@com.tw"
-        order.insertOrder(userEmail,1,100,mockEmailUtil)
+        order.insertOrder(userEmail, 1, 100, mockEmailUtil)
+
 
         // to verify mock object has call sendCustomer function
-        verify(mockEmailUtil).sendCustomer(userEmail)
+        verify { mockEmailUtil.sendCustomer(any()) }
+
         // verify 1 times
-        verify(mockEmailUtil, times(1)).sendCustomer(userEmail)
+        verify(exactly = 1) { mockEmailUtil.sendCustomer(any()) }
+//        verify(mockEmailUtil, times(1)).sendCustomer(userEmail)
         // verify cannot call function
-        verify(mockEmailUtil, never()).sendCustomer(userEmail)
+//        verify(exactly = 0) { mockEmailUtil.sendCustomer(any())  }
         // verify least 1 times
-        verify(mockEmailUtil, atLeast(1)).sendCustomer(userEmail)
+        verify(atLeast = 1) { mockEmailUtil.sendCustomer(any()) }
         // verify most 1 times
-        verify(mockEmailUtil, atMost(1)).sendCustomer(userEmail)
+        verify(atMost = 1) { mockEmailUtil.sendCustomer(any()) }
     }
 }

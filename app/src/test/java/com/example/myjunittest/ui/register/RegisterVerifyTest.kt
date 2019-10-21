@@ -1,18 +1,18 @@
 package com.example.myjunittest.ui.register
 
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.SpyK
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class RegisterVerifyTest {
-
-    private lateinit var  registerVerify: RegisterVerify
+    @SpyK
+    lateinit var  registerVerify: RegisterVerify
 
     @Before
-    fun setup() {
-        registerVerify = RegisterVerify()
-    }
+    fun setup() = MockKAnnotations.init(this,relaxed = true)
 
     @Test
     fun verifyLoginIdTrue() {

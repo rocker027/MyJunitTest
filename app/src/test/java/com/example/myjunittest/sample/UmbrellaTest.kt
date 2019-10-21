@@ -1,28 +1,29 @@
 package com.example.myjunittest.sample
 
-import com.example.myjunittest.sample.IWeather
-import com.example.myjunittest.sample.Umbrella
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 
 class UmbrellaTest {
-    @Mock
+    @MockK
     lateinit var weather: IWeather
+
+    lateinit var umbrella: Umbrella
 
     @Before
     fun setup() {
-        MockitoAnnotations.initMocks(this)
+        MockKAnnotations.init(this)
+        umbrella = Umbrella()
     }
 
     @Test
     fun totalPriceWithSunnyday() {
-        val umbrella = Umbrella()
         // use mock.when to return true or false
-        `when`(weather.isSunny()).thenReturn(true)
+        every { weather.isSunny() } returns true
         val expected = 200
         val actual = umbrella.getTotalPrice(weather, 2, 100)
         assertEquals(expected, actual)
@@ -30,9 +31,8 @@ class UmbrellaTest {
 
     @Test
     fun totalPriceWithRainingday() {
-        val umbrella = Umbrella()
         // use mock.when to return true or false
-        `when`(weather.isSunny()).thenReturn(false)
+        every { weather.isSunny() } returns false
         val expected = 180
         val actual = umbrella.getTotalPrice(weather, 2, 100)
         assertEquals(expected, actual)
