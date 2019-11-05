@@ -1,24 +1,28 @@
 package com.example.myjunittest
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.example.myjunittest.R
+import com.example.myjunittest.databinding.ActivityMainBinding
+import com.example.myjunittest.ui.base.BaseActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ViewModel, ActivityMainBinding>() {
+    override fun getLayoutResId(): Int = R.layout.activity_main
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun initActivityViewModel(): ViewModel =  mShareViewModel
+
+    override fun initData() {
+    }
+
+    override fun initView() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+//         Passing each menu ID as a set of Ids because each
+//         menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration.Builder(
 //            navController.graph
             setOf(
