@@ -16,7 +16,6 @@ class App : Application(), ViewModelStoreOwner {
     override fun onCreate() {
         super.onCreate()
         mAppViewModelStore = ViewModelStore()
-        mFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(this)
     }
 
     override fun getViewModelStore(): ViewModelStore {
@@ -43,7 +42,7 @@ class App : Application(), ViewModelStoreOwner {
      */
     fun getAppFactory(activity: Activity): ViewModelProvider.Factory {
         var application = checkApplication(activity)
-        if (mFactory == null) {
+        if (this::mFactory.isInitialized == false) {
             mFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         }
         return mFactory
