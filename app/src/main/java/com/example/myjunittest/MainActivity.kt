@@ -1,4 +1,4 @@
-package com.example.myjunittest.ui
+package com.example.myjunittest
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
