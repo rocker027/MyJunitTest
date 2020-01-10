@@ -1,18 +1,13 @@
 package com.example.myjunittest.ui.register
 
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.SpyK
+import io.mockk.impl.annotations.MockK
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 
 class RegisterVerifyTest {
-    @SpyK
-    lateinit var  registerVerify: RegisterVerify
-
-    @Before
-    fun setup() = MockKAnnotations.init(this,relaxed = true)
+    @MockK
+    val registerVerify: RegisterVerify = RegisterVerify()
 
     @Test
     fun verifyLoginIdTrue() {
@@ -39,7 +34,6 @@ class RegisterVerifyTest {
         assertFalse(registerVerify.verifyUserPassword("AAAAAAAAA"))
     }
 
-//    verifyUserPasswordIncorrectlyWithNonNumbersAndText
     @Test
     fun verifyUserPasswordFalseByNotLatterDigit() {
         assertFalse(registerVerify.verifyUserPassword("        "))
