@@ -5,6 +5,8 @@ import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.room.Room
+import com.example.myjunittest.db.AppDatabase
 
 /**
  * @author rocker
@@ -15,6 +17,9 @@ class App : Application(), ViewModelStoreOwner {
 
     override fun onCreate() {
         super.onCreate()
+        // init database
+        AppDatabase.getInstance(this)
+
         mAppViewModelStore = ViewModelStore()
     }
 
