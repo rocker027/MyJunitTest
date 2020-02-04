@@ -18,7 +18,7 @@ class RegisterVerifyTest {
 
     @Test
     fun verifyLoginIdTrue() {
-        assertTrue(registerVerify.verityUserId("A123456"))
+        assertTrue(registerVerify.verityUserId("a123456"))
     }
 
     @Test

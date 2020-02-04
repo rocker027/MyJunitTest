@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.myjunittest.R
 import kotlinx.android.synthetic.main.fragment_register.*
 
@@ -19,7 +19,7 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         registerViewModel =
-            ViewModelProviders.of(this).get(RegisterViewModel::class.java)
+            ViewModelProvider(this).get(RegisterViewModel::class.java)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
@@ -34,6 +34,7 @@ class RegisterFragment : Fragment() {
                     etInputUserName.text.toString(),
                     etInputPassword.text.toString()) -> {
                     Toast.makeText(context,"it right",Toast.LENGTH_SHORT).show()
+//                    RegisterRepository(context!!).saveUserId(etInputUserName.text.toString())
                 }
                 else -> {
                     Toast.makeText(context,"input user Id / Password incorrect !! please check ~",Toast.LENGTH_SHORT).show()
