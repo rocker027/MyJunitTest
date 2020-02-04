@@ -49,7 +49,7 @@ class SurveyAnnotationMockk {
         // when
         kid.wantMoney()
         // then
-        verify { mother.inform(any()) }
+        verify(exactly = 1) { mother.inform(any()) }
         assertEquals(30, kid.money)
     }
 }
