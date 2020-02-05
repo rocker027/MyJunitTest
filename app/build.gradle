@@ -30,6 +30,14 @@ android {
             includeAndroidResources = true
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 androidExtensions {
@@ -77,4 +85,7 @@ dependencies {
     def mockk_version = "1.9.3"
     testImplementation("io.mockk:mockk:$mockk_version")
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
+
+    def fragment_version = "1.2.0"
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 }
