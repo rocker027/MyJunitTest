@@ -52,7 +52,7 @@ abstract class BaseActivity<VM : ViewModel, VDB : ViewDataBinding> : AppCompatAc
         val app = applicationContext as App
         val appFactory = app.getAppFactory(this)
 
-        mViewModel = ViewModelProviders.of(this, appFactory).get(vmClass)
+        mViewModel = ViewModelProvider(this, appFactory).get(vmClass)
     }
 
     /**
