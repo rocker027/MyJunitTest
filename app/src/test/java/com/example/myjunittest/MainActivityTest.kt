@@ -15,6 +15,14 @@ import org.robolectric.shadows.ShadowToast
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityTest {
+    /**
+    如果用Robolectirc來直接測試Activity，只關注。
+    1.Activity初始化是否有呼叫IPresenter.getProduct。
+    2.呼叫IProductView.onGetResult，是否有將商品結果放到UI上。
+    3.呼叫IProductView.onBuySuccess，是否有Toast。
+    4.呼叫IProductView.onBuyFail，是否有AlertDialog。
+     */
+
     lateinit var activity: MainActivity
     @Before
     fun setUpActivity() {
