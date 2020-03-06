@@ -125,5 +125,5 @@ dependencies {
     def lifecycle_version = '2.1.0-beta01'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
-
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 }

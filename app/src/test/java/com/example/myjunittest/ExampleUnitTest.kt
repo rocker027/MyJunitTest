@@ -32,8 +32,36 @@ class ExampleUnitTest {
 
     @Test
     fun testCoroutines() {
-        CoroutineScope(Dispatchers.Default).launch{
+        CoroutineScope(Dispatchers.Default).launch {
             println("test")
         }
     }
+
+    @Test
+    fun testReturn()  {
+        val value = 11
+        val str = "124"
+        val max = if(value < str.length) 22 else 11
+    }
+
+    @Test
+    fun testFor() {
+        (1..10).forEach {
+            println(it)
+        }
+
+        val list = listOf<Int>(1, 2, 3, 4, 5, 5, 6, 7)
+        list.forEach {
+            println(it)
+        }
+
+        list.apply {
+            this.forEach { println(it) }
+        }
+    }
+
+    @Test
+    fun testList() {
+    }
+
 }
