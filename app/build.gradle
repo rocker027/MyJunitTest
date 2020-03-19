@@ -126,4 +126,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation 'com.tencent:mmkv-static:1.0.24'
+    // mmkv
+    implementation 'com.orhanobut:hawk:2.0.1'
+    // hawk key-value
 }
