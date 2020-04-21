@@ -7,15 +7,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.example.myjunittest.App
 import com.example.myjunittest.viewmodel.BaseViewModel
 import com.example.myjunittest.viewmodel.ShareViewModel
+import org.koin.android.ext.android.get
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.lang.reflect.ParameterizedType
 
 
 abstract class BaseActivity<VM : ViewModel, VDB : ViewDataBinding> : AppCompatActivity() {
-    protected lateinit var mShareViewModel: ShareViewModel
+    protected val mShareViewModel: ShareViewModel by viewModel()
     protected lateinit var mViewModel: VM
     protected lateinit var mDataBinding: VDB
 
@@ -24,18 +24,9 @@ abstract class BaseActivity<VM : ViewModel, VDB : ViewDataBinding> : AppCompatAc
         val layoutResId = getLayoutResId()
         mDataBinding = DataBindingUtil.setContentView(this, layoutResId)
         mDataBinding.lifecycleOwner = this
-        mShareViewModel = getAppViewProvider().get(ShareViewModel::class.java)
         initActivityViewModel()
         initView()
         initData()
-    }
-
-    /**
-     * 取得Application ViewModelProvider
-     */
-    private fun getAppViewProvider(): ViewModelProvider {
-        val app = applicationContext as App
-        return app.getAppViewModelProvider(this)
     }
 
     /**
@@ -47,12 +38,9 @@ abstract class BaseActivity<VM : ViewModel, VDB : ViewDataBinding> : AppCompatAc
     /**
      * 初始化 Activity ViewModel
      */
-    fun initActivityViewModel() {
+    private fun initActivityViewModel() {
         val vmClass: Class<VM> = getViewModelClass(javaClass)
-        val app = applicationContext as App
-        val appFactory = app.getAppFactory(this)
-
-        mViewModel = ViewModelProvider(this, appFactory).get(vmClass)
+        mViewModel = ViewModelProvider(this, get()).get(vmClass)
     }
 
     /**
