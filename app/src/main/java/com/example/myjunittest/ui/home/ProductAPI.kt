@@ -1,6 +1,7 @@
 package com.example.myjunittest.ui.home
 
 import android.os.Handler
+import com.squareup.moshi.JsonClass
 
 interface IProductAPI {
     interface ProductDataCallback {
@@ -32,6 +33,7 @@ class ProductAPI : IProductAPI {
 
 }
 
+@JsonClass(generateAdapter = true)
 data class ProductResponse(
     var id: String,
     var name: String,
