@@ -8,7 +8,7 @@ import com.github.kittinunf.result.Result.Success
 import org.junit.Test
 
 class FuelTest {
-    val productUrl =
+    private val productUrl =
         "https://firebasestorage.googleapis.com/v0/b/phoneauth-e70bb.appspot.com/o/product.json?alt=media&token=c051df05-399a-42af-b60f-b5430643d78e"
 
     @Test
@@ -36,6 +36,10 @@ class FuelTest {
         productUrl
             .httpGet()
             .responseObject(moshiDeserializerOf(ProductResponse::class.java)) { request, response, result ->
+                println("req \n $request")
+                println("res \n $response")
+                println("result \n $result")
+
                 when (result) {
                     is Failure -> {
                         println("failure")
@@ -46,6 +50,7 @@ class FuelTest {
                         println("success")
                         val data = result.get()
                         println(data)
+
                     }
                 }
             }.join()
