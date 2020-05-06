@@ -1,6 +1,7 @@
 package com.example.myjunittest.ui.dashboard
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,23 +10,14 @@ import com.example.myjunittest.R
 import com.example.myjunittest.api.ServiceApi
 import com.example.myjunittest.ui.home.HomeRepository
 import com.example.myjunittest.ui.home.ProductAPI
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import com.tinder.scarlet.Scarlet
-import com.tinder.scarlet.WebSocket
-import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
-import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
-import com.tinder.scarlet.retry.ExponentialWithJitterBackoffStrategy
-import com.tinder.scarlet.streamadapter.rxjava2.RxJava2StreamAdapterFactory
-import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
-import com.tinder.scarlet.ws.Receive
-import com.tinder.scarlet.ws.Send
-import io.reactivex.Flowable
+import com.neovisionaries.ws.client.WebSocket
+import com.neovisionaries.ws.client.WebSocketAdapter
+import com.neovisionaries.ws.client.WebSocketFactory
+import com.neovisionaries.ws.client.WebSocketFrame
+import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
-import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
-import java.util.concurrent.TimeUnit
 
 class DashboardFragment : Fragment() {
 
@@ -38,7 +30,14 @@ class DashboardFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         root.btn1.setOnClickListener {
-            callWebSocket()
+            println("click")
+            Observable.just("1")
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    println("start send")
+                    callWebSocketV2()
+                }, { e -> println(e.message) })
+
         }
 
         root.btn2.setOnClickListener {
@@ -56,87 +55,30 @@ class DashboardFragment : Fragment() {
             .subscribe({ t -> println(t.body()) })
     }
 
+    //
+    private fun callWebSocketV2() {
+        // Create a WebSocket with a socket connection timeout value.
+        val ws = WebSocketFactory().createSocket(
+            "ws://10.200.252.185:17803/register-mobile?token=da9a7a0c-968d-4aed-86c1-4f2dda2dc193",
+            5000
+        )
 
-    private fun callWebSocket() {
-        val url =
-            "ws://10.200.252.185:17803/register-mobile?token=da9a7a0c-968d-4aed-86c1-4f2dda2dc193"
-        val lifecycle = AndroidLifecycle.ofApplicationForeground(activity!!.application)
-        val backoffStrategy = ExponentialWithJitterBackoffStrategy(5000, 5000)
+        // Register a listener to receive WebSocket events.
+        ws.addListener(object : WebSocketAdapter() {
+            override fun onTextMessage(websocket: WebSocket?, text: String?) {
+                super.onTextMessage(websocket, text)
+                Log.v("WSS", text)
+            }
 
-        val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .build()
+            override fun onCloseFrame(websocket: WebSocket?, frame: WebSocketFrame?) {
+                super.onCloseFrame(websocket, frame)
+                Log.v("WSS", "closing socket")
+            }
+        })
 
-        val socket = Scarlet.Builder()
-            .webSocketFactory(okHttpClient.newWebSocketFactory(url))
-            .addMessageAdapterFactory(MoshiMessageAdapter.Factory())
-            .addStreamAdapterFactory(RxJava2StreamAdapterFactory())
-            .backoffStrategy(backoffStrategy)
-            .lifecycle(lifecycle)
-            .build()
-            .create<SocketService>()
-
-        // Observe the WebSocket connection
-        socket.observeWebSocketEvent()
-//            .filter { it is WebSocket.Event.OnConnectionOpened<*> }
-            .subscribe({
-                println("websocket --> doing")
-                if (it is WebSocket.Event.OnConnectionOpened<*>) {
-                }
-                when (it) {
-                    is WebSocket.Event.OnConnectionOpened<*> -> {
-                        println("websocket subscribe")
-                        socket.sendSubscribe(RegisterSubscribe(1, "register"))
-                        println("WebSocket.Event.OnConnectionOpened")}
-                    is WebSocket.Event.OnConnectionClosed -> {println("WebSocket.Event.OnConnectionClosed")}
-                    is WebSocket.Event.OnConnectionClosing -> {println("WebSocket.Event.OnConnectionClosing")}
-                    is WebSocket.Event.OnConnectionFailed -> {println("WebSocket.Event.OnConnectionOnConnectionFailedOpened")}
-                    is WebSocket.Event.OnMessageReceived -> {println("WebSocket.Event.OnMessageReceived")}
-                }
-            }, { error ->
-                print("websocket Error while observing socket ${error}")
-            })
-
-// Observe the ticker channel
-        socket.observeCaptcha()
-            .subscribe({
-                print("websocket New Bitcoin price: ${print(it.data)}")
-            }, { error ->
-                print("websocket Error while observing ticker ${error.cause}")
-            })
+        ws.connect()
+        ws.sendText("hello !")
+        ws.disconnect()
     }
-}
-
-
-interface SocketService {
-    @Receive
-    fun observeWebSocketEvent(): Flowable<WebSocket.Event>
-
-    @Send
-    fun sendSubscribe(subscribe: RegisterSubscribe)
-
-    @Receive
-    fun observeCaptcha(): Flowable<ValidateDataClass>
 
 }
-
-@JsonClass(generateAdapter = true)
-data class ValidateDataClass(
-    val `data`: Data,
-    val topic: String
-)
-
-@JsonClass(generateAdapter = true)
-data class Data(
-    val id: Int,
-    val type: Int,
-    val url: String
-)
-
-@JsonClass(generateAdapter = true)
-data class RegisterSubscribe(
-    @Json(name = "status") val status: Int,
-    @Json(name = "topic") val topic: String
-)
