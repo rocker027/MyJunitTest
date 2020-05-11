@@ -27,4 +27,9 @@
         android:name="com.example.myjunittest.ui.register.RegisterFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/spineFragment"
+        android:name="com.example.myjunittest.SpineFragment"
+        android:label="fragment_spine"
+        tools:layout="@layout/fragment_spine" />
 </navigation>
