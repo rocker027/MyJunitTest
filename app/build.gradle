@@ -170,4 +170,9 @@ dependencies {
     implementation 'com.neovisionaries:nv-websocket-client:2.9'
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    // 骨骼動畫
+//    implementation 'com.badlogicgames.gdx:gdx-backend-android:1.9.9'
+//    implementation 'com.badlogicgames.gdx:gdx:latest.release'
+//    implementation 'com.badlogicgames.gdx:gdx-box2d:latest.release'
+//    implementation 'com.esotericsoftware.spine:spine-libgdx:latest.release'
 }
