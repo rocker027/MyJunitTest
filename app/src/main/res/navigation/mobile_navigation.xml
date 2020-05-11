@@ -26,10 +26,14 @@
         android:id="@+id/loginFragment"
         android:name="com.example.myjunittest.ui.register.RegisterFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_loginFragment_to_spineFragment"
+            app:destination="@id/spineFragment" />
+    </fragment>
     <fragment
         android:id="@+id/spineFragment"
-        android:name="com.example.myjunittest.SpineFragment"
+        android:name="com.example.myjunittest.ui.spine.SpineFragment"
         android:label="fragment_spine"
         tools:layout="@layout/fragment_spine" />
 </navigation>
