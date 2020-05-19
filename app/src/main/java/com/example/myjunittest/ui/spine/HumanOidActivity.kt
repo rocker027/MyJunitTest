@@ -3,6 +3,7 @@ package com.example.myjunittest.ui.spine
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import com.airbnb.deeplinkdispatch.DeepLink
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.android.AndroidApplication
@@ -15,7 +16,8 @@ import com.esotericsoftware.spine.*
 import com.example.myjunittest.R
 import kotlinx.android.synthetic.main.activity_human_oid.*
 
-
+//@DeepLink({"marksixmarksixmarksixapp://example.com/deepLink/{id}" , "cpcpcpapp://example.com/anotherDeepLink"})
+@DeepLink("foo://example.com/deepLink/{id}")
 class HumanOidActivity : AndroidApplication() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

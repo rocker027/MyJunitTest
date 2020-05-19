@@ -175,4 +175,7 @@ dependencies {
 //    implementation 'com.badlogicgames.gdx:gdx:latest.release'
 //    implementation 'com.badlogicgames.gdx:gdx-box2d:latest.release'
 //    implementation 'com.esotericsoftware.spine:spine-libgdx:latest.release'
+
+    implementation 'com.airbnb:deeplinkdispatch:5.1.0'
+    kapt 'com.airbnb:deeplinkdispatch-processor:5.1.0'
 }
