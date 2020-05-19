@@ -36,4 +36,9 @@
         android:name="com.example.myjunittest.ui.spine.SpineFragment"
         android:label="fragment_spine"
         tools:layout="@layout/fragment_spine" />
+    <fragment
+        android:id="@+id/navigation_menu"
+        android:name="com.example.myjunittest.ui.menu.MenuFragment"
+        android:label="@string/title_menu"
+        tools:layout="@layout/fragment_menu" />
 </navigation>

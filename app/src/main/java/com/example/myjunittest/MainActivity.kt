@@ -26,7 +26,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         val appBarConfiguration = AppBarConfiguration.Builder(
 //            navController.graph
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications ,R.id.navigation_menu
             )
         ).build()
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
