@@ -26,5 +26,32 @@
         android:id="@+id/loginFragment"
         android:name="com.example.myjunittest.ui.register.RegisterFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_loginFragment_to_spineFragment"
+            app:destination="@id/spineFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/spineFragment"
+        android:name="com.example.myjunittest.ui.spine.SpineFragment"
+        android:label="fragment_spine"
+        tools:layout="@layout/fragment_spine" />
+    <fragment
+        android:id="@+id/navigation_menu"
+        android:name="com.example.myjunittest.ui.menu.MenuFragment"
+        android:label="@string/title_menu"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_navigation_menu_to_ecPagingAnimationFragment"
+            app:destination="@id/ecPagingAnimationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ecPagingAnimationFragment"
+        android:name="com.example.myjunittest.ui.menu.animation.EcPagingAnimationFragment"
+        android:label="fragment_paging_animation"
+        tools:layout="@layout/fragment_ec_paging_animation" >
+        <action
+            android:id="@+id/action_ecPagingAnimationFragment_to_navigation_menu"
+            app:destination="@id/navigation_menu" />
+    </fragment>
 </navigation>
