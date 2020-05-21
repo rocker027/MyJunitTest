@@ -78,7 +78,6 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.navigation:navigation-fragment:2.2.0'
     implementation 'androidx.navigation:navigation-ui:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
@@ -185,6 +184,10 @@ dependencies {
 // 使用依赖注入时或者制作基于 coil 的库引用
     implementation "io.coil-kt:coil-base:0.11.0"
 
+
+    // viewpager
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
 
     // 骨骼動畫
 //    implementation 'com.badlogicgames.gdx:gdx-backend-android:1.9.9'
