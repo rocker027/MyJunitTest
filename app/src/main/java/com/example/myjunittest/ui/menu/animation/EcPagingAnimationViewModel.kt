@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 
 class EcPagingAnimationViewModel : ViewModel() {
 
-    fun getFakeItems(): MutableList<Int> {
-        return mutableListOf<Int>(1,2,3,4,5,6)
-    }
+    val fakeItems : MutableList<Int> = mutableListOf(1, 2, 3, 4, 5, 6)
+
 }
