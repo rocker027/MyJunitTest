@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,10 @@ class EcPagingAnimationFragment : Fragment() {
 
     private lateinit var viewModel: EcPagingAnimationViewModel
 
+    // find view
+    private lateinit var viewpager: ViewPager2
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,14 +36,25 @@ class EcPagingAnimationFragment : Fragment() {
         setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.fragment_ec_paging_animation, container, false)
         initView(view)
+        initLiveData()
+        setUpComponents()
         return view
     }
 
-    private fun initView(view: View) {
-        // find view
-        val viewpager = view.findViewById<ViewPager2>(R.id.vp_imagepager)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_items)
+    private fun initLiveData() {
+        viewModel.currentPositionLiveData.observe(viewLifecycleOwner, Observer { pos ->
+            viewpager.currentItem = pos
+            recyclerView.smoothScrollToPosition(pos)
+        })
 
+    }
+
+    private fun initView(view: View) {
+        viewpager = view.findViewById(R.id.vp_imagepager)
+        recyclerView = view.findViewById(R.id.rv_items)
+    }
+
+    private fun setUpComponents() {
         // 初始化Viewpager
         val data = viewModel.fakeItems
         viewpager.adapter = TopImagePagerAdapter(data)
@@ -55,7 +71,7 @@ class EcPagingAnimationFragment : Fragment() {
                 super.onScrollStateChanged(rv, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     val currentPosition = (rv.layoutManager as CircleLayoutManager).currentPosition
-                    viewpager.currentItem = currentPosition
+                    viewModel.currentPositionLiveData.value = currentPosition
                 }
             }
         })
@@ -64,10 +80,11 @@ class EcPagingAnimationFragment : Fragment() {
         viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                recyclerView.smoothScrollToPosition(position)
+                viewModel.currentPositionLiveData.value = position
             }
         })
     }
+
 
     // 捕捉toolbar item click
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
