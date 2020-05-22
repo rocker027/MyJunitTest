@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.myjunittest.MainActivity
 import com.example.myjunittest.R
 import com.example.myjunittest.api.GankData
 import com.example.myjunittest.base.BaseFragment
@@ -63,6 +64,7 @@ class EcPagingAnimationFragment : BaseFragment() {
         viewModel = ViewModelProvider(this).get(EcPagingAnimationViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_ec_paging_animation, container, false)
         setHasOptionsMenu(true)
+        (activity as MainActivity).hideToolBar()
         fetchGankApiData()
         initView(view)
         initLiveData()

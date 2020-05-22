@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
+import coil.transform.RoundedCornersTransformation
 import com.example.myjunittest.R
 import com.example.myjunittest.api.GankData
 
@@ -47,6 +48,7 @@ class SwipItemsAdapter(val items: MutableList<GankData>) :
         fun bind(url: String) {
             ivItemImg.load(url) {
                 crossfade(true)
+                transformations(RoundedCornersTransformation(20f))
             }
         }
     }

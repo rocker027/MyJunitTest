@@ -1,5 +1,6 @@
 package com.example.myjunittest
 
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -36,5 +37,10 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         ).build()
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         navView.setupWithNavController(navController)
+    }
+
+    fun hideToolBar() {
+        val toolbar : Toolbar = findViewById(R.id.toolbar)
+        toolbar.visibility = View.GONE
     }
 }
