@@ -1,5 +1,9 @@
 package com.example.myjunittest.ui.menu.animation
 
+import android.animation.Keyframe
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -28,6 +32,29 @@ class EcPagingAnimationFragment : BaseFragment() {
     private lateinit var tvDesc: TextView
     private lateinit var swipItemsAdapter: SwipItemsAdapter
     private lateinit var topImagePagerAdapter: TopImagePagerAdapter
+
+    private val animationFade = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
+        duration = 1000
+        addUpdateListener { animation ->
+//            tvTitle.alpha = animation.animatedValue as Float
+//            tvTitle.requestLayout()
+            tvDesc.alpha = animation.animatedValue as Float
+            tvDesc.requestLayout()
+            tvUpdateTime.alpha = animation.animatedValue as Float
+            tvUpdateTime.requestLayout()
+        }
+    }
+
+    val frameHolder = PropertyValuesHolder.ofKeyframe(
+        "rotation",
+        Keyframe.ofFloat(0f, 0f),
+        Keyframe.ofFloat(0.1f, -30f),
+        Keyframe.ofFloat(0.3f, 30f),
+        Keyframe.ofFloat(0.6f, -30f),
+        Keyframe.ofFloat(0.8f, 30f),
+        Keyframe.ofFloat(1f, 0f)
+    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +102,13 @@ class EcPagingAnimationFragment : BaseFragment() {
                         recyclerView.smoothScrollToPosition(uiState.pos)
 
                         newData[uiState.pos].run {
+                            val animator =
+                                ObjectAnimator.ofPropertyValuesHolder(tvTitle, frameHolder).apply {
+                                    duration = 1000
+                                }
+                            animator.start()
+                            animationFade.start()
+
                             tvTitle.text = title
                             tvDesc.text = desc
                             tvUpdateTime.text = createdAt
