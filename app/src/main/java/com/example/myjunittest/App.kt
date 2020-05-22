@@ -10,6 +10,13 @@ import com.example.myjunittest.api.ServiceApi
 import com.example.myjunittest.db.AppDatabase
 import com.example.myjunittest.db.dao.UserDao
 import com.example.myjunittest.viewmodel.ShareViewModel
+import com.github.kittinunf.fuel.core.FuelManager
+import com.github.kittinunf.fuel.core.Request
+import com.github.kittinunf.fuel.core.extensions.cUrlString
+import com.github.kittinunf.fuel.core.interceptors.LogRequestInterceptor
+import com.github.kittinunf.fuel.core.interceptors.LogResponseInterceptor
+import com.github.kittinunf.fuel.core.interceptors.cUrlLoggingRequestInterceptor
+import com.github.kittinunf.fuel.core.interceptors.loggingResponseInterceptor
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -35,10 +42,19 @@ class App : Application(), ViewModelStoreOwner {
 
         mAppViewModelStore = ViewModelStore()
 
+        initFuel()
+
         // koin
         startKoin {
             androidContext(this@App)
             modules(appModule)
+        }
+    }
+
+    private fun initFuel() {
+        FuelManager.instance.apply {
+            addResponseInterceptor(LogResponseInterceptor)
+            addRequestInterceptor(LogRequestInterceptor)
         }
     }
 
