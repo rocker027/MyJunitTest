@@ -7,13 +7,14 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.example.myjunittest.R
+import com.example.myjunittest.api.GankData
 
 /**
  * TopImageViewPagerAdapter
  *
  * @property datas
  */
-class TopImagePagerAdapter(val datas : MutableList<Int>) :
+class TopImagePagerAdapter(val datas: MutableList<GankData>) :
     RecyclerView.Adapter<TopImagePagerAdapter.TopImageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopImageViewHolder {
@@ -27,13 +28,21 @@ class TopImagePagerAdapter(val datas : MutableList<Int>) :
     }
 
     override fun onBindViewHolder(holder: TopImageViewHolder, position: Int) {
-        holder.bind("https://placeimg.com/1080/1080/any")
+        val gankData = datas[position]
+        holder.bind(gankData.url)
+    }
+
+    fun setNewData(newData: List<GankData>) {
+        datas.clear()
+        datas.addAll(newData)
+        notifyDataSetChanged()
     }
 
     inner class TopImageViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val ivTopImageView: ImageView = view.findViewById(
             R.id.iv_top_img
         )
+
         fun bind(url: String) {
             ivTopImageView.load(url) {
                 crossfade(true)

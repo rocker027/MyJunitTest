@@ -7,13 +7,14 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.example.myjunittest.R
+import com.example.myjunittest.api.GankData
 
 /**
  * 商品滑動RecyclerView Adapter
  *
  * @property items
  */
-class SwipItemsAdapter(val items: List<Int>) :
+class SwipItemsAdapter(val items: MutableList<GankData>) :
     RecyclerView.Adapter<SwipItemsAdapter.SwipItemViewHolder>() {
 
 
@@ -27,7 +28,14 @@ class SwipItemsAdapter(val items: List<Int>) :
     override fun getItemCount(): Int = if (items.isNullOrEmpty()) 0 else items.size
 
     override fun onBindViewHolder(holder: SwipItemViewHolder, position: Int) {
-        holder.bind("https://placeimg.com/50/50/any")
+        val gankData = items[position]
+        holder.bind(gankData.url)
+    }
+
+    fun setNewData(newData: MutableList<GankData>) {
+        items.clear()
+        items.addAll(newData)
+        notifyDataSetChanged()
     }
 
     // ViewHolder
