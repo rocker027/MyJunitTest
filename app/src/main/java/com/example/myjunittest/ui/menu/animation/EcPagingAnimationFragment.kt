@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,8 @@ import com.example.myjunittest.R
 import com.example.myjunittest.api.GankData
 import com.example.myjunittest.base.BaseFragment
 import com.example.myjunittest.utils.layoutmanager.CircleLayoutManager
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.launch
 
 
@@ -33,6 +36,8 @@ class EcPagingAnimationFragment : BaseFragment() {
     private lateinit var tvDesc: TextView
     private lateinit var swipItemsAdapter: SwipItemsAdapter
     private lateinit var topImagePagerAdapter: TopImagePagerAdapter
+    private lateinit var btnCart: MaterialButton
+
 
     private val animationFade = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
         duration = 1000
@@ -136,6 +141,21 @@ class EcPagingAnimationFragment : BaseFragment() {
         tvTitle = view.findViewById(R.id.tv_title)
         tvUpdateTime = view.findViewById(R.id.tv_update_time)
         tvDesc = view.findViewById(R.id.tv_desc)
+        btnCart = view.findViewById(R.id.btn_cart)
+
+        btnCart.setOnClickListener {
+            // 設定要顯示的共享元素 id
+            val extras = FragmentNavigatorExtras(
+                btnCart to "root_bg"
+            )
+            // 將共享元素資訊加到NavController
+            findNavController().navigate(
+                R.id.action_ecPagingAnimationFragment_to_ecPagingAnimationCartFragment,
+                null,
+                null,
+                extras
+            )
+        }
     }
 
     private fun setUpComponents() {

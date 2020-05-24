@@ -53,5 +53,13 @@
         <action
             android:id="@+id/action_ecPagingAnimationFragment_to_navigation_menu"
             app:destination="@id/navigation_menu" />
+        <action
+            android:id="@+id/action_ecPagingAnimationFragment_to_ecPagingAnimationCartFragment"
+            app:destination="@id/ecPagingAnimationCartFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/ecPagingAnimationCartFragment"
+        android:name="com.example.myjunittest.ui.menu.animation.EcPagingAnimationCartFragment"
+        android:label="fragment_ec_paging_animation_cart"
+        tools:layout="@layout/fragment_ec_paging_animation_cart" />
 </navigation>
