@@ -21,6 +21,7 @@ import com.example.myjunittest.MainActivity
 import com.example.myjunittest.R
 import com.example.myjunittest.api.GankData
 import com.example.myjunittest.base.BaseFragment
+import com.example.myjunittest.databinding.FragmentEcPagingAnimationBinding
 import com.example.myjunittest.utils.layoutmanager.CircleLayoutManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.transition.MaterialContainerTransform
@@ -37,7 +38,7 @@ class EcPagingAnimationFragment : BaseFragment() {
     private lateinit var swipItemsAdapter: SwipItemsAdapter
     private lateinit var topImagePagerAdapter: TopImagePagerAdapter
     private lateinit var btnCart: MaterialButton
-
+    private lateinit var viewBinding: FragmentEcPagingAnimationBinding
 
     private val animationFade = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
         duration = 1000
@@ -67,14 +68,14 @@ class EcPagingAnimationFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(EcPagingAnimationViewModel::class.java)
-        val view = inflater.inflate(R.layout.fragment_ec_paging_animation, container, false)
+        viewBinding = FragmentEcPagingAnimationBinding.inflate(inflater)
         setHasOptionsMenu(true)
         (activity as MainActivity).hideToolBar()
         fetchGankApiData()
-        initView(view)
+        initView()
         initLiveData()
         setUpComponents()
-        return view
+        return viewBinding.root
     }
 
     private fun fetchGankApiData() {
@@ -132,16 +133,14 @@ class EcPagingAnimationFragment : BaseFragment() {
 
     /**
      * 初始化 View Components
-     *
-     * @param view
      */
-    private fun initView(view: View) {
-        viewpager = view.findViewById(R.id.vp_imagepager)
-        recyclerView = view.findViewById(R.id.rv_items)
-        tvTitle = view.findViewById(R.id.tv_title)
-        tvUpdateTime = view.findViewById(R.id.tv_update_time)
-        tvDesc = view.findViewById(R.id.tv_desc)
-        btnCart = view.findViewById(R.id.btn_cart)
+    private fun initView() {
+        viewpager = viewBinding.vpImagepager
+        recyclerView = viewBinding.rvItems
+        tvTitle = viewBinding.tvTitle
+        tvUpdateTime = viewBinding.tvUpdateTime
+        tvDesc = viewBinding.tvDesc
+        btnCart = viewBinding.btnCart
 
         btnCart.setOnClickListener {
             // 設定要顯示的共享元素 id
