@@ -1,59 +1,56 @@
 package com.example.myjunittest.ui.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.myjunittest.viewmodel.BaseViewModel
-import com.example.myjunittest.viewmodel.ShareViewModel
-import org.koin.android.ext.android.get
-import org.koin.android.viewmodel.ext.android.viewModel
+import androidx.viewbinding.ViewBinding
+import com.example.myjunittest.base.BaseViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import java.lang.reflect.ParameterizedType
 
+abstract class BaseActivity<VM : ViewModel, VB : ViewBinding> : AppCompatActivity() {
+    protected lateinit var activityViewBinding: VB
+    protected lateinit var activityViewModel: VM
 
-abstract class BaseActivity<VM : ViewModel, VDB : ViewDataBinding> : AppCompatActivity() {
-    protected val mShareViewModel: ShareViewModel by viewModel()
-    protected lateinit var mViewModel: VM
-    protected lateinit var mDataBinding: VDB
+    // coroutines
+    private val job = SupervisorJob()
+    internal val mainScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val layoutResId = getLayoutResId()
-        mDataBinding = DataBindingUtil.setContentView(this, layoutResId)
-        mDataBinding.lifecycleOwner = this
-        initActivityViewModel()
+        initViewBinding()
+        initViewModel()
         initView()
         initData()
     }
 
-    /**
-     * 初始化 Layout Res Id
-     */
-    @LayoutRes
-    abstract fun getLayoutResId(): Int
 
-    /**
-     * 初始化 Activity ViewModel
-     */
-    private fun initActivityViewModel() {
-        val vmClass: Class<VM> = getViewModelClass(javaClass)
-        mViewModel = ViewModelProvider(this, get()).get(vmClass)
+    // 初始化ViewBinding
+    fun initViewBinding() {
+        val type = javaClass.genericSuperclass
+        if (type is ParameterizedType) {
+            val clazz = type.actualTypeArguments[1] as Class<VB>
+            val method = clazz.getMethod("inflate", LayoutInflater::class.java)
+            activityViewBinding = method.invoke(null, layoutInflater) as VB
+            setContentView(activityViewBinding.root)
+        }
     }
 
-    /**
-     * 透過Java反射找到對應的VM 指定的ViewModel
-     */
-    private fun getViewModelClass(aClass: Class<BaseActivity<VM, VDB>>): Class<VM> {
-        val type = aClass.genericSuperclass
-        return if (type is ParameterizedType) {
+    // 初始化ViewModel
+    fun initViewModel() {
+        val type = javaClass.genericSuperclass
+        val vmClass = if (type is ParameterizedType) {
             type.actualTypeArguments[0] as Class<VM>
         } else {
             //如果没有指定泛型参数，则默认使用BaseViewModel
             BaseViewModel::class.java as Class<VM>
         }
+
+        activityViewModel = ViewModelProvider(this).get(vmClass)
     }
 
     /**
@@ -65,4 +62,9 @@ abstract class BaseActivity<VM : ViewModel, VDB : ViewDataBinding> : AppCompatAc
      * 初始化 View
      */
     abstract fun initView()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
 }

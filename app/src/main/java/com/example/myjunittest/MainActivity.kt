@@ -12,7 +12,6 @@ import com.example.myjunittest.viewmodel.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() {
-    override fun getLayoutResId(): Int = R.layout.activity_main
 
 //    override fun initActivityViewModel(): ViewModel =  mShareViewModel
 
@@ -21,8 +20,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
     override fun initView() {
         // 將自定義的Toolbar加進去ActionBar
-        val toolbar : Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(activityViewBinding.toolbar)
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
