@@ -3,13 +3,9 @@ package com.example.myjunittest.ui.menu.animation
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AnimationSet
 import androidx.fragment.app.Fragment
 import com.example.myjunittest.base.BaseFragment
+import com.example.myjunittest.base.BaseViewModel
 import com.example.myjunittest.databinding.FragmentEcPagingAnimationCartBinding
 import com.google.android.material.transition.MaterialContainerTransform
 
@@ -19,27 +15,15 @@ import com.google.android.material.transition.MaterialContainerTransform
  * Use the [EcPagingAnimationCartFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EcPagingAnimationCartFragment : BaseFragment() {
-    private lateinit var cartViewBinding: FragmentEcPagingAnimationCartBinding
+class EcPagingAnimationCartFragment : BaseFragment<EcPagingAnimationCartViewModel,FragmentEcPagingAnimationCartBinding>() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        cartViewBinding = FragmentEcPagingAnimationCartBinding.inflate(inflater)
+    override fun initView() {
         // 設定 共享元素進入動畫
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             duration = 1500
         }
 
-        initView()
-
-
-        return cartViewBinding.root
-    }
-
-    private fun initView() {
-        cartViewBinding.btnClick.apply {
+        fragmentViewBinding!!.btnClick.apply {
             setOnClickListener {
                 playTo()
             }
@@ -49,17 +33,17 @@ class EcPagingAnimationCartFragment : BaseFragment() {
 
     private fun playTo() {
         val trans =
-            ObjectAnimator.ofFloat(cartViewBinding.imageView, "translationX", 0f, 100f, 0f, 100f)
+            ObjectAnimator.ofFloat(fragmentViewBinding!!.imageView, "translationX", 0f, 100f, 0f, 100f)
                 .apply {
                     duration = 3000
                 }
 
-        val alpha = ObjectAnimator.ofFloat(cartViewBinding.imageView, "alpha", 1f, 0f)
+        val alpha = ObjectAnimator.ofFloat(fragmentViewBinding!!.imageView, "alpha", 1f, 0f)
             .apply {
                 duration = 6000
             }
 
-        val rotation = ObjectAnimator.ofFloat(cartViewBinding.imageView, "rotationY", 0f, 360f)
+        val rotation = ObjectAnimator.ofFloat(fragmentViewBinding!!.imageView, "rotationY", 0f, 360f)
             .apply {
                 duration = 3000
             }
@@ -73,21 +57,21 @@ class EcPagingAnimationCartFragment : BaseFragment() {
     }
 
     private fun transMoiveX() {
-        ObjectAnimator.ofFloat(cartViewBinding.imageView, "translationX", 0f, 100f, 0f, 100f)
+        ObjectAnimator.ofFloat(fragmentViewBinding!!.imageView, "translationX", 0f, 100f, 0f, 100f)
             .apply {
                 duration = 3000
             }.start()
     }
 
     private fun alpha() {
-        ObjectAnimator.ofFloat(cartViewBinding.imageView, "alpha", 1f, 0f)
+        ObjectAnimator.ofFloat(fragmentViewBinding!!.imageView, "alpha", 1f, 0f)
             .apply {
                 duration = 3000
             }.start()
     }
 
     private fun rotationY() {
-        ObjectAnimator.ofFloat(cartViewBinding.imageView, "rotationY", 0f, 360f)
+        ObjectAnimator.ofFloat(fragmentViewBinding!!.imageView, "rotationY", 0f, 360f)
             .apply {
                 duration = 3000
             }.start()
@@ -98,9 +82,13 @@ class EcPagingAnimationCartFragment : BaseFragment() {
             duration = 3000
             addUpdateListener {
                 val currentValue = it.animatedValue as Float
-                cartViewBinding.imageView.alpha = currentValue
-                cartViewBinding.imageView.requestLayout()
+                fragmentViewBinding!!.imageView.alpha = currentValue
+                fragmentViewBinding!!.imageView.requestLayout()
             }
         }.start()
+    }
+
+    override fun initData() {
+
     }
 }

@@ -4,14 +4,9 @@ import android.animation.Keyframe
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -24,12 +19,11 @@ import com.example.myjunittest.base.BaseFragment
 import com.example.myjunittest.databinding.FragmentEcPagingAnimationBinding
 import com.example.myjunittest.utils.layoutmanager.CircleLayoutManager
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.launch
 
 
-class EcPagingAnimationFragment : BaseFragment() {
-    private lateinit var viewModel: EcPagingAnimationViewModel
+class EcPagingAnimationFragment :
+    BaseFragment<EcPagingAnimationViewModel, FragmentEcPagingAnimationBinding>() {
     private lateinit var viewpager: ViewPager2
     private lateinit var recyclerView: RecyclerView
     private lateinit var tvTitle: TextView
@@ -38,7 +32,6 @@ class EcPagingAnimationFragment : BaseFragment() {
     private lateinit var swipItemsAdapter: SwipItemsAdapter
     private lateinit var topImagePagerAdapter: TopImagePagerAdapter
     private lateinit var btnCart: MaterialButton
-    private lateinit var viewBinding: FragmentEcPagingAnimationBinding
 
     private val animationFade = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
         duration = 1000
@@ -63,23 +56,8 @@ class EcPagingAnimationFragment : BaseFragment() {
     )
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewModel = ViewModelProvider(this).get(EcPagingAnimationViewModel::class.java)
-        viewBinding = FragmentEcPagingAnimationBinding.inflate(inflater)
-        setHasOptionsMenu(true)
-        (activity as MainActivity).hideToolBar()
-        fetchGankApiData()
-        initView()
-        initLiveData()
-        setUpComponents()
-        return viewBinding.root
-    }
-
     private fun fetchGankApiData() {
-        viewModel.callGankApiData()
+        fragmentViewModel.callGankApiData()
     }
 
     sealed class UiStatus {
@@ -100,10 +78,10 @@ class EcPagingAnimationFragment : BaseFragment() {
      * 初始化 live data
      */
     private fun initLiveData() {
-        viewModel.fragmentLiveData.observe(
+        fragmentViewModel.fragmentLiveData.observe(
             viewLifecycleOwner,
             Observer { uiState ->
-                val newData = viewModel.gankDatas
+                val newData = fragmentViewModel.gankDatas
                 when (uiState) {
                     is UiStatus.UpdateCurrentPosititon -> {
                         viewpager.currentItem = uiState.pos
@@ -134,27 +112,30 @@ class EcPagingAnimationFragment : BaseFragment() {
     /**
      * 初始化 View Components
      */
-    private fun initView() {
-        viewpager = viewBinding.vpImagepager
-        recyclerView = viewBinding.rvItems
-        tvTitle = viewBinding.tvTitle
-        tvUpdateTime = viewBinding.tvUpdateTime
-        tvDesc = viewBinding.tvDesc
-        btnCart = viewBinding.btnCart
+    override fun initView() {
+        fragmentViewBinding?.let {
+            viewpager = it.vpImagepager
+            recyclerView = it.rvItems
+            tvTitle = it.tvTitle
+            tvUpdateTime = it.tvUpdateTime
+            tvDesc = it.tvDesc
+            btnCart = it.btnCart
 
-        btnCart.setOnClickListener {
-            // 設定要顯示的共享元素 id
-            val extras = FragmentNavigatorExtras(
-                btnCart to "root_bg"
-            )
-            // 將共享元素資訊加到NavController
-            findNavController().navigate(
-                R.id.action_ecPagingAnimationFragment_to_ecPagingAnimationCartFragment,
-                null,
-                null,
-                extras
-            )
+            btnCart.setOnClickListener {
+                // 設定要顯示的共享元素 id
+                val extras = FragmentNavigatorExtras(
+                    btnCart to "root_bg"
+                )
+                // 將共享元素資訊加到NavController
+                findNavController().navigate(
+                    R.id.action_ecPagingAnimationFragment_to_ecPagingAnimationCartFragment,
+                    null,
+                    null,
+                    extras
+                )
+            }
         }
+
     }
 
     private fun setUpComponents() {
@@ -179,7 +160,7 @@ class EcPagingAnimationFragment : BaseFragment() {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     val currentPosition = (rv.layoutManager as CircleLayoutManager).currentPosition
                     mainScope.launch {
-                        viewModel.fragmentLiveData.value =
+                        fragmentViewModel.fragmentLiveData.value =
                             UiStatus.UpdateCurrentPosititon(currentPosition)
                     }
                 }
@@ -191,7 +172,7 @@ class EcPagingAnimationFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 mainScope.launch {
-                    viewModel.fragmentLiveData.value =
+                    fragmentViewModel.fragmentLiveData.value =
                         UiStatus.UpdateCurrentPosititon(position)
                 }
             }
@@ -207,5 +188,13 @@ class EcPagingAnimationFragment : BaseFragment() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun initData() {
+        setHasOptionsMenu(true)
+        (activity as MainActivity).hideToolBar()
+        fetchGankApiData()
+        initLiveData()
+        setUpComponents()
     }
 }
