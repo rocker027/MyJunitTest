@@ -1,0 +1,24 @@
+package com.example.myjunittest.utils
+
+import android.os.SystemClock
+import android.view.View
+
+/**
+ * 防止View Double Click
+ *
+ * @property defaultInterval
+ * @property onSafeCLick
+ */
+class SafeClickListener(
+    private var defaultInterval: Int = 1000,
+    private val onSafeCLick: (View) -> Unit
+) : View.OnClickListener {
+    private var lastTimeClicked: Long = 0
+    override fun onClick(v: View) {
+        if (SystemClock.elapsedRealtime() - lastTimeClicked < defaultInterval) {
+            return
+        }
+        lastTimeClicked = SystemClock.elapsedRealtime()
+        onSafeCLick(v)
+    }
+}
